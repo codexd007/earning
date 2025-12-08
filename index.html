@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Money Hub - Facebook Accounts | Trading Signals | Los Coin</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css">
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px #25D366; }
+            50% { box-shadow: 0 0 40px #25D366; }
+        }
+        @keyframes coin-spin {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+        @keyframes money-fall {
+            0% { transform: translateY(-100px); opacity: 0; }
+            100% { transform: translateY(100vh); opacity: 1; }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .floating { animation: float 3s infinite; }
+        .glowing { animation: glow 2s infinite; }
+        .spinning { animation: coin-spin 3s linear infinite; }
+        .pulse { animation: pulse 2s infinite; }
+        .bounce { animation: bounce 1s infinite; }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <canvas id="bg-canvas"></canvas>
+    
+    <!-- Stars -->
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    
+    <!-- Money Falling -->
+    <div class="money-fall"></div>
+    
+    <!-- Loading -->
+    <div id="loading">
+        <div class="loading-3d">
+            <div class="cube">
+                <div class="face front"></div>
+                <div class="face back">$</div>
+                <div class="face right">€</div>
+                <div class="face left"></div>
+            </div>
+            <h2>Loading Money System...</h2>
+            <div class="progress-bar"><div class="progress"></div></div>
+        </div>
+    </div>
+
+    <!-- Login -->
+    <div id="login-screen">
+        <div class="login-box floating">
+            <div class="login-logo">
+                <i class="fas fa-money-bill-wave"></i>
+                <h1>Money <span class="green">Hub</span></h1>
+                <p>Earn Money Online System</p>
+            </div>
+            
+            <form id="login-form">
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" placeholder="Username" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                <p class="register-link">
+                    No account? <a href="#" id="show-register">Register Free</a>
+                </p>
+            </form>
+            
+            <div class="login-stats">
+                <div class="stat">
+                    <i class="fas fa-users"></i>
+                    <h3>1,000+</h3>
+                    <p>Active Users</p>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-rupee-sign"></i>
+                    <h3>2M+</h3>
+                    <p>Earned</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register -->
+    <div id="register-screen" class="hidden">
+        <div class="register-box">
+            <div class="register-header">
+                <button class="back-btn"><i class="fas fa-arrow-left"></i></button>
+                <h2>Create Account</h2>
+            </div>
+            
+            <form id="register-form">
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" placeholder="Full Name" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-phone"></i>
+                    <input type="tel" placeholder="WhatsApp Number" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" placeholder="Password" required>
+                </div>
+                
+                <button type="submit" class="register-btn">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="dashboard" class="hidden">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <i class="fas fa-coins"></i>
+                <h2>Money Hub</h2>
+            </div>
+            
+            <nav>
+                <a href="#facebook" class="nav-btn active">
+                    <i class="fab fa-facebook"></i> Facebook
+                </a>
+                <a href="#trading" class="nav-btn">
+                    <i class="fas fa-chart-line"></i> Trading
+                </a>
+                <a href="#coin" class="nav-btn">
+                    <i class="fas fa-coins"></i> Los Coin
+                </a>
+                <a href="#about" class="nav-btn">
+                    <i class="fas fa-user"></i> About Me
+                </a>
+            </nav>
+            
+            <div class="user-info">
+                <div class="balance">
+                    <i class="fas fa-wallet"></i>
+                    <span id="user-balance">0</span>
+                </div>
+                <button class="logout-btn">Logout</button>
+            </div>
+        </header>
+
+        <!-- Facebook Section -->
+        <section id="facebook" class="section active">
+            <div class="section-header">
+                <h1><i class="fab fa-facebook"></i> Create Facebook Accounts</h1>
+                <div class="price-badge glowing">Price: 10 Rs/PKR per account</div>
+            </div>
+            
+            <div class="content-grid">
+                <!-- Left: 3D Box -->
+                <div class="fb-3d-box">
+                    <div class="box-3d floating">
+                        <div class="front">
+                            <div class="fb-icon">
+                                <i class="fab fa-facebook"></i>
+                            </div>
+                            <h3>Facebook Account Creator</h3>
+                            <div class="account-count">
+                                <i class="fas fa-user-plus"></i>
+                                <span id="fb-accounts-count">0</span> Accounts
+                            </div>
+                            <div class="features">
+                                <span><i class="fas fa-check"></i> Real Profiles</span>
+                                <span><i class="fas fa-check"></i> Email Access</span>
+                                <span><i class="fas fa-check"></i> Ready to Use</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right: Account Creator -->
+                <div class="details-panel">
+                    <h3><i class="fas fa-plus-circle"></i> Create New Accounts</h3>
+                    
+                    <div class="account-creator">
+                        <div class="quantity-selector">
+                            <label for="account-quantity">
+                                <i class="fas fa-hashtag"></i> How many accounts?
+                            </label>
+                            <div class="quantity-control">
+                                <button type="button" class="qty-btn" onclick="adjustQuantity(-1)">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" id="account-quantity" min="1" max="100" value="1">
+                                <button type="button" class="qty-btn" onclick="adjustQuantity(1)">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="total-price">
+                                <span>Total Price:</span>
+                                <span class="price">Rs <span id="total-price">10</span></span>
+                            </div>
+                        </div>
+                        
+                        <button id="create-fb-accounts" class="create-btn glowing">
+                            <i class="fas fa-user-plus"></i> Create Accounts Now
+                        </button>
+                        
+                        <div class="whatsapp-action" style="display: none;" id="send-fb-ids">
+                            <button class="whatsapp-btn whatsapp-action">
+                                <i class="fab fa-whatsapp"></i> Send UID|Pass to Owner
+                            </button>
+                            <p class="note">Will open WhatsApp with all account details</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Created Accounts List -->
+                    <div class="accounts-list">
+                        <h4><i class="fas fa-list"></i> Generated Accounts:</h4>
+                        <div id="fb-accounts-list">
+                            <!-- Accounts will appear here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Facebook Marketing Images -->
+            <div class="image-section">
+                <h3><i class="fas fa-ad"></i> Facebook Marketing Examples:</h3>
+                <div class="images-grid">
+                    <div class="img-box">
+                        <img src="https://images.unsplash.com/photo-1633675254053-d96c7668c3b8?w=300&h=200&fit=crop&auto=format" alt="FB Ads">
+                        <p>Facebook Ads Manager</p>
+                    </div>
+                    <div class="img-box">
+                        <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=300&h=200&fit=crop&auto=format" alt="FB Business">
+                        <p>Business Suite</p>
+                    </div>
+                    <div class="img-box">
+                        <img src="https://images.unsplash.com/photo-1611605698323-8c5af3ad0d81?w=300&h=200&fit=crop&auto=format" alt="FB Analytics">
+                        <p>Analytics Dashboard</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trading Section -->
+        <section id="trading" class="section">
+            <div class="section-header">
+                <h1><i class="fas fa-chart-line"></i> Trading Signals</h1>
+                <div class="salary-badge glowing">Earn 15,000 Rs/PKR per month</div>
+            </div>
+            
+            <div class="content-grid">
+                <!-- Left: 3D Box -->
+                <div class="trading-3d-box">
+                    <div class="box-3d floating">
+                        <div class="front">
+                            <div class="trading-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h3>Trading Signals</h3>
+                            <p class="salary">15k Rs/month</p>
+                            <div class="features">
+                                <span><i class="fas fa-check"></i> Daily Signals</span>
+                                <span><i class="fas fa-check"></i> 90%+ Accuracy</span>
+                                <span><i class="fas fa-check"></i> 24/7 Support</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right: Details -->
+                <div class="details-panel">
+                    <h3><i class="fas fa-signal"></i> Signal Details</h3>
+                    
+                    <div class="signal-info">
+                        <div class="info-box">
+                            <i class="fas fa-rupee-sign"></i>
+                            <div>
+                                <h4>Monthly Income</h4>
+                                <p>15,000 Rs/PKR</p>
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            <i class="fas fa-percentage"></i>
+                            <div>
+                                <h4>Success Rate</h4>
+                                <p>90%+</p>
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            <i class="fas fa-bell"></i>
+                            <div>
+                                <h4>Signals/Day</h4>
+                                <p>3-5</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="trading-payment">
+                        <h4><i class="fas fa-money-bill-wave"></i> Get Signals:</h4>
+                        <p>Contact via WhatsApp for signal access</p>
+                        
+                        <div class="contact-method">
+                            <div class="whatsapp-contact">
+                                <i class="fab fa-whatsapp"></i>
+                                <div>
+                                    <strong>WhatsApp:</strong>
+                                    <span>+92 333 4912454</span>
+                                </div>
+                                <button class="copy" onclick="navigator.clipboard.writeText('+923334912454')">
+                                    <i class="far fa-copy"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="send-options">
+                                <button class="send-signal-btn whatsapp-action">
+                                    <i class="fab fa-whatsapp"></i> Send Message on WhatsApp
+                                </button>
+                                <button class="send-signal-btn email">
+                                    <i class="fas fa-envelope"></i> Send Email
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-note">
+                            <p><i class="fas fa-info-circle"></i> Send your request on WhatsApp/Email</p>
+                            <p><i class="fas fa-shield-alt"></i> Payment after verification</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Trading Images -->
+            <div class="image-section">
+                <h3><i class="fas fa-chart-bar"></i> Trading Platform:</h3>
+                <div class="images-grid">
+                    <div class="img-box">
+                        <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=300&h=200&fit=crop" alt="Trading 1">
+                        <p>Live Charts</p>
+                    </div>
+                    <div class="img-box">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=300&h=200&fit=crop" alt="Trading 2">
+                        <p>Profit Screens</p>
+                    </div>
+                    <div class="img-box">
+                        <img src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=300&h=200&fit=crop" alt="Trading 3">
+                        <p>Signal System</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Los Coin Section -->
+        <section id="coin" class="section">
+            <div class="section-header">
+                <h1><i class="fas fa-coins"></i> Los Coin Clicker</h1>
+                <div class="coin-badge glowing">Earn Money by Clicking</div>
+            </div>
+            
+            <div class="content-grid">
+                <!-- Left: Coin -->
+                <div class="coin-container">
+                    <div class="coin-3d spinning" id="coin-click">
+                        <div class="coin-front">
+                            <i class="fas fa-coins"></i>
+                            <h3>LOS COIN</h3>
+                            <p>CLICK FAST!</p>
+                            <div class="click-effect"></div>
+                        </div>
+                    </div>
+                    <div class="click-info bounce">
+                        <i class="fas fa-hand-pointer"></i>
+                        <p>Click the coin to earn!</p>
+                    </div>
+                </div>
+                
+                <!-- Right: Stats -->
+                <div class="stats-panel">
+                    <div class="stats-header">
+                        <h3><i class="fas fa-chart-bar"></i> Click Statistics</h3>
+                        <div class="live-badge pulse">LIVE</div>
+                    </div>
+                    
+                    <div class="counter">
+                        <div class="total-clicks">
+                            <h4>Total Clicks</h4>
+                            <div class="count" id="total-clicks">0</div>
+                        </div>
+                        <div class="click-speed">
+                            <h4>Speed</h4>
+                            <div class="speed">
+                                <span id="clicks-per-sec">0</span>
+                                <small>clicks/sec</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="rewards-system">
+                        <h4><i class="fas fa-gift"></i> Rewards:</h4>
+                        <div class="rewards">
+                            <div class="reward" data-target="50000">
+                                <span>50,000 Clicks</span>
+                                <span class="amount">$1 / 275 Rs</span>
+                                <span class="status" id="reward-50k">Not Reached</span>
+                            </div>
+                            <div class="reward" data-target="100000">
+                                <span>100,000 Clicks</span>
+                                <span class="amount">$2 / 550 Rs</span>
+                                <span class="status" id="reward-100k">Not Reached</span>
+                            </div>
+                            <div class="reward" data-target="150000">
+                                <span>150,000 Clicks</span>
+                                <span class="amount">$3 / 825 Rs</span>
+                                <span class="status" id="reward-150k">Not Reached</span>
+                            </div>
+                            <div class="reward" data-target="200000">
+                                <span>200,000 Clicks</span>
+                                <span class="amount">$4 / 1100 Rs</span>
+                                <span class="status" id="reward-200k">Not Reached</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="withdraw-section">
+                        <h4><i class="fas fa-wallet"></i> Withdraw Earnings</h4>
+                        <p>Enter your payment details to receive money:</p>
+                        
+                        <div class="withdraw-form">
+                            <select id="payment-method">
+                                <option>Select Payment Method</option>
+                                <option>Binance</option>
+                                <option>Easypaisa</option>
+                                <option>JazzCash</option>
+                                <option>Bank Transfer</option>
+                            </select>
+                            
+                            <input type="text" id="account-number" placeholder="Enter your account number">
+                            <input type="email" id="user-email" placeholder="Your email for confirmation">
+                            
+                            <div class="current-balance">
+                                <span>Available Balance:</span>
+                                <span id="coin-balance">$0 (Rs 0)</span>
+                            </div>
+                            
+                            <button class="withdraw-btn">
+                                <i class="fas fa-paper-plane"></i> Submit Withdrawal Request
+                            </button>
+                        </div>
+                        
+                        <div class="notification-box">
+                            <h4><i class="fas fa-bell"></i> Automatic Notification:</h4>
+                            <p>When you complete clicks, you'll get notification with options:</p>
+                            <ul>
+                                <li>Click more to earn more (continue for next reward)</li>
+                                <li>Withdraw now (get current earnings)</li>
+                            </ul>
+                            <p class="note">We'll send payment screenshot to your email after processing</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Coin Images -->
+            <div class="image-section">
+                <h3><i class="fas fa-images"></i> Los Coin System:</h3>
+                <div class="images-grid">
+                    <div class="img-box">
+                        <img src="https://images.unsplash.com/photo-1620336655055-bd87c5d1d73f?w=300&h=200&fit=crop" alt="Coin 1">
+                        <p>Los Coin</p>
+                    </div>
+                    <div class="img-box">
+                        <img src="https://images.unsplash.com/photo-1633265486064-086b219458ec?w=300&h=200&fit=crop" alt="Coin 2">
+                        <p>Click System</p>
+                    </div>
+                    <div class="img-box">
+                        <img src="https://images.unsplash.com/photo-1621570072941-1d0a5f5c5406?w=300&h=200&fit=crop" alt="Coin 3">
+                        <p>Earnings</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Auto Notification Display -->
+            <div class="notification-display" id="notification-display">
+                <div class="notification-header">
+                    <i class="fas fa-bell"></i>
+                    <h4>Click Goal Reached!</h4>
+                    <button class="close-notif">&times;</button>
+                </div>
+                <div class="notification-body">
+                    <p>Congratulations! You've reached <span id="goal-reached">50,000</span> clicks!</p>
+                    <p>What would you like to do?</p>
+                    <div class="notification-options">
+                        <button class="option-btn continue">
+                            <i class="fas fa-redo"></i> Click More (Earn More)
+                        </button>
+                        <button class="option-btn withdraw">
+                            <i class="fas fa-money-bill-wave"></i> Withdraw Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Me Section -->
+        <section id="about" class="section">
+            <div class="section-header">
+                <h1><i class="fas fa-user-tie"></i> About Me & Contact</h1>
+            </div>
+            
+            <div class="about-content">
+                <!-- Profile -->
+                <div class="profile-card floating">
+                    <div class="profile-header">
+                        <div class="profile-img">
+                            <img src="https://i.ibb.co/kgQb0kBv/profile.jpg" alt="My Photo" onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop'">
+                        </div>
+                        <div class="profile-info">
+                            <h2>Professional Web Developer & Trader</h2>
+                            <div class="tags">
+                                <span class="tag"><i class="fas fa-code"></i> Web Developer</span>
+                                <span class="tag"><i class="fas fa-chart-line"></i> Trader</span>
+                                <span class="tag"><i class="fas fa-coins"></i> Crypto Expert</span>
+                            </div>
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <span>4.8/5.0 Rating</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-bio">
+                        <h3><i class="fas fa-lightbulb"></i> My Services:</h3>
+                        <p>I provide legitimate online earning opportunities through Facebook accounts, trading signals, and click-based earnings. All services are 100% real and verified.</p>
+                    </div>
+                    
+                    <div class="contact-details">
+                        <h3><i class="fas fa-address-book"></i> Contact Information:</h3>
+                        <div class="contacts">
+                            <div class="contact">
+                                <div class="icon fb">
+                                    <i class="fab fa-facebook-f"></i>
+                                </div>
+                                <div>
+                                    <h4>Facebook</h4>
+                                    <a href="https://www.facebook.com/share/1JxksD7H15/" target="_blank">
+                                        Visit My Profile
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="contact">
+                                <div class="icon wa">
+                                    <i class="fab fa-whatsapp"></i>
+                                </div>
+                                <div>
+                                    <h4>WhatsApp</h4>
+                                    <a href="https://wa.me/923334912454" target="_blank">
+                                        +92 333 4912454
+                                    </a>
+                                    <small>Available 24/7</small>
+                                </div>
+                            </div>
+                            
+                            <div class="contact">
+                                <div class="icon email">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <h4>Email</h4>
+                                    <a href="mailto:xstylishriaz72@gmail.com">
+                                        xstylishriaz72@gmail.com
+                                    </a>
+                                    <small>For payments & support</small>
+                                </div>
+                            </div>
+                            
+                            <div class="contact">
+                                <div class="icon payment">
+                                    <i class="fas fa-credit-card"></i>
+                                </div>
+                                <div>
+                                    <h4>Payment Methods</h4>
+                                    <p>Binance | Easypaisa | JazzCash</p>
+                                    <small>Contact for details</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-instructions">
+                        <h3><i class="fas fa-money-check-alt"></i> How to Pay:</h3>
+                        <ol>
+                            <li>Choose service (Facebook/Trading/Coin)</li>
+                            <li>Send payment via Easypaisa/JazzCash/Binance</li>
+                            <li>Send screenshot to WhatsApp/Email</li>
+                            <li>Receive service immediately</li>
+                            <li>For coin earnings: Submit withdrawal request</li>
+                            <li>Receive payment screenshot after processing</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <!-- Service Images -->
+                <div class="services-images">
+                    <h3><i class="fas fa-images"></i> My Services Gallery:</h3>
+                    <div class="services-grid">
+                        <div class="service-img">
+                            <img src="https://images.unsplash.com/photo-1633675254053-d96c7668c3b8?w=300&h=200&fit=crop&auto=format" alt="Service 1">
+                            <p>Facebook Accounts</p>
+                        </div>
+                        <div class="service-img">
+                            <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=300&h=200&fit=crop" alt="Service 2">
+                            <p>Trading Signals</p>
+                        </div>
+                        <div class="service-img">
+                            <img src="https://images.unsplash.com/photo-1620336655055-bd87c5d1d73f?w=300&h=200&fit=crop" alt="Service 3">
+                            <p>Los Coin System</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Call to Action -->
+            <div class="cta-section glowing">
+                <h3><i class="fas fa-rocket"></i> Ready to Start Earning?</h3>
+                <p>Choose any service above or contact me directly</p>
+                <div class="cta-buttons">
+                    <button class="cta-btn whatsapp whatsapp-action">
+                        <i class="fab fa-whatsapp"></i> WhatsApp Now
+                    </button>
+                    <button class="cta-btn email">
+                        <i class="fas fa-envelope"></i> Send Email
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Audio -->
+    <audio id="click-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3"></audio>
+    <audio id="coin-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-coin-insert-1005.mp3"></audio>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
