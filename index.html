@@ -2,44 +2,67 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0a0a2a">
     <title>Money Hub - Facebook Accounts | Trading Signals | Los Coin</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css">
-    <style>
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 0 20px #25D366; }
-            50% { box-shadow: 0 0 40px #25D366; }
-        }
-        @keyframes coin-spin {
-            0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(360deg); }
-        }
-        @keyframes money-fall {
-            0% { transform: translateY(-100px); opacity: 0; }
-            100% { transform: translateY(100vh); opacity: 1; }
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        .floating { animation: float 3s infinite; }
-        .glowing { animation: glow 2s infinite; }
-        .spinning { animation: coin-spin 3s linear infinite; }
-        .pulse { animation: pulse 2s infinite; }
-        .bounce { animation: bounce 1s infinite; }
-    </style>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22></text></svg>">
 </head>
 <body>
+    <!-- Auto-clicker Blocker -->
+    <div id="auto-clicker-blocker">
+        <i class="fas fa-ban" style="font-size: 80px; margin-bottom: 20px;"></i>
+        <h2>Auto-Clicker Detected!</h2>
+        <p>This website does not allow auto-clickers or cheating software.</p>
+        <p>Please refresh the page and use manual clicks only.</p>
+        <button onclick="location.reload()">Refresh Page</button>
+    </div>
+
+    <!-- Withdrawal Popup -->
+    <div id="withdrawal-popup">
+        <div class="withdrawal-popup-box">
+            <div class="withdrawal-popup-header">
+                <h3><i class="fas fa-money-bill-wave"></i> Withdraw Earnings</h3>
+                <button class="close-popup">&times;</button>
+            </div>
+            <div class="withdrawal-amount-display">
+                <p>Withdrawal Amount:</p>
+                <div class="amount" id="popup-amount">Rs 275</div>
+                <p>for completing 100,000 clicks</p>
+            </div>
+            <form class="withdrawal-popup-form" id="withdrawal-popup-form">
+                <select id="popup-payment-method" required>
+                    <option value="">Select Payment Method</option>
+                    <option value="Binance">Binance</option>
+                    <option value="Easypaisa">Easypaisa</option>
+                    <option value="JazzCash">JazzCash</option>
+                    <option value="Bank Transfer">Bank Transfer</option>
+                </select>
+                <div class="error-message" id="method-error"></div>
+                
+                <input type="text" id="popup-account-number" placeholder="Enter your account number" required>
+                <div class="error-message" id="account-error"></div>
+                
+                <input type="email" id="popup-email" placeholder="Enter your email for confirmation" required>
+                <div class="error-message" id="email-error"></div>
+                
+                <input type="text" id="popup-name" placeholder="Your full name" required>
+                <div class="error-message" id="name-error"></div>
+                
+                <button type="submit" class="submit-withdrawal-popup">
+                    <i class="fas fa-paper-plane"></i> Submit Withdrawal Request
+                </button>
+            </form>
+            <div class="success-message" id="withdrawal-success">
+                <i class="fas fa-check-circle"></i> Withdrawal submitted successfully!
+            </div>
+        </div>
+    </div>
+
     <!-- Background -->
     <canvas id="bg-canvas"></canvas>
     
@@ -53,11 +76,13 @@
     <!-- Loading -->
     <div id="loading">
         <div class="loading-3d">
-            <div class="cube">
+            <div class="cube enhanced-3d">
                 <div class="face front"></div>
                 <div class="face back">$</div>
                 <div class="face right">€</div>
                 <div class="face left"></div>
+                <div class="face top"></div>
+                <div class="face bottom">£</div>
             </div>
             <h2>Loading Money System...</h2>
             <div class="progress-bar"><div class="progress"></div></div>
@@ -66,7 +91,7 @@
 
     <!-- Login -->
     <div id="login-screen">
-        <div class="login-box floating">
+        <div class="login-box floating enhanced-3d">
             <div class="login-logo">
                 <i class="fas fa-money-bill-wave"></i>
                 <h1>Money <span class="green">Hub</span></h1>
@@ -76,15 +101,18 @@
             <form id="login-form">
                 <div class="input-group">
                     <i class="fas fa-user"></i>
-                    <input type="text" placeholder="Username" required>
+                    <input type="text" placeholder="Username" id="login-username" required>
+                    <div class="error-message" id="login-username-error"></div>
                 </div>
                 <div class="input-group">
                     <i class="fas fa-lock"></i>
-                    <input type="password" placeholder="Password" required>
+                    <input type="password" placeholder="Password" id="login-password" required>
+                    <div class="error-message" id="login-password-error"></div>
                 </div>
-                <button type="submit" class="login-btn">
+                <button type="submit" class="login-btn glowing">
                     <i class="fas fa-sign-in-alt"></i> Login
                 </button>
+                <div class="error-message" id="login-error"></div>
                 <p class="register-link">
                     No account? <a href="#" id="show-register">Register Free</a>
                 </p>
@@ -107,7 +135,7 @@
 
     <!-- Register -->
     <div id="register-screen" class="hidden">
-        <div class="register-box">
+        <div class="register-box enhanced-3d">
             <div class="register-header">
                 <button class="back-btn"><i class="fas fa-arrow-left"></i></button>
                 <h2>Create Account</h2>
@@ -116,24 +144,35 @@
             <form id="register-form">
                 <div class="input-group">
                     <i class="fas fa-user"></i>
-                    <input type="text" placeholder="Full Name" required>
+                    <input type="text" placeholder="Full Name" id="register-name" required>
+                    <div class="error-message" id="register-name-error"></div>
                 </div>
                 <div class="input-group">
                     <i class="fas fa-envelope"></i>
-                    <input type="email" placeholder="Email" required>
+                    <input type="email" placeholder="Email" id="register-email" required>
+                    <div class="error-message" id="register-email-error"></div>
                 </div>
                 <div class="input-group">
                     <i class="fas fa-phone"></i>
-                    <input type="tel" placeholder="WhatsApp Number" required>
+                    <input type="tel" placeholder="WhatsApp Number" id="register-whatsapp" required>
+                    <div class="error-message" id="register-whatsapp-error"></div>
                 </div>
                 <div class="input-group">
                     <i class="fas fa-lock"></i>
-                    <input type="password" placeholder="Password" required>
+                    <input type="password" placeholder="Password" id="register-password" required>
+                    <div class="error-message" id="register-password-error"></div>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" placeholder="Confirm Password" id="register-confirm-password" required>
+                    <div class="error-message" id="register-confirm-error"></div>
                 </div>
                 
-                <button type="submit" class="register-btn">
+                <button type="submit" class="register-btn glowing">
                     <i class="fas fa-user-plus"></i> Create Account
                 </button>
+                <div class="error-message" id="register-error"></div>
+                <div class="success-message" id="register-success"></div>
             </form>
         </div>
     </div>
@@ -181,7 +220,7 @@
             <div class="content-grid">
                 <!-- Left: 3D Box -->
                 <div class="fb-3d-box">
-                    <div class="box-3d floating">
+                    <div class="box-3d floating enhanced-3d">
                         <div class="front">
                             <div class="fb-icon">
                                 <i class="fab fa-facebook"></i>
@@ -201,7 +240,7 @@
                 </div>
                 
                 <!-- Right: Account Creator -->
-                <div class="details-panel">
+                <div class="details-panel enhanced-3d">
                     <h3><i class="fas fa-plus-circle"></i> Create New Accounts</h3>
                     
                     <div class="account-creator">
@@ -250,16 +289,16 @@
             <div class="image-section">
                 <h3><i class="fas fa-ad"></i> Facebook Marketing Examples:</h3>
                 <div class="images-grid">
-                    <div class="img-box">
-                        <img src="https://images.unsplash.com/photo-1633675254053-d96c7668c3b8?w=300&h=200&fit=crop&auto=format" alt="FB Ads">
+                    <div class="img-box enhanced-3d">
+                        <img src="https://images.pexels.com/photos/3944419/pexels-photo-3944419.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&dpr=2" alt="FB Ads" loading="lazy">
                         <p>Facebook Ads Manager</p>
                     </div>
-                    <div class="img-box">
-                        <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=300&h=200&fit=crop&auto=format" alt="FB Business">
+                    <div class="img-box enhanced-3d">
+                        <img src="https://images.pexels.com/photos/6348119/pexels-photo-6348119.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&dpr=2" alt="FB Business" loading="lazy">
                         <p>Business Suite</p>
                     </div>
-                    <div class="img-box">
-                        <img src="https://images.unsplash.com/photo-1611605698323-8c5af3ad0d81?w=300&h=200&fit=crop&auto=format" alt="FB Analytics">
+                    <div class="img-box enhanced-3d">
+                        <img src="https://images.pexels.com/photos/6476589/pexels-photo-6476589.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&dpr=2" alt="FB Analytics" loading="lazy">
                         <p>Analytics Dashboard</p>
                     </div>
                 </div>
@@ -276,7 +315,7 @@
             <div class="content-grid">
                 <!-- Left: 3D Box -->
                 <div class="trading-3d-box">
-                    <div class="box-3d floating">
+                    <div class="box-3d floating enhanced-3d">
                         <div class="front">
                             <div class="trading-icon">
                                 <i class="fas fa-chart-line"></i>
@@ -293,7 +332,7 @@
                 </div>
                 
                 <!-- Right: Details -->
-                <div class="details-panel">
+                <div class="details-panel enhanced-3d">
                     <h3><i class="fas fa-signal"></i> Signal Details</h3>
                     
                     <div class="signal-info">
@@ -358,16 +397,16 @@
             <div class="image-section">
                 <h3><i class="fas fa-chart-bar"></i> Trading Platform:</h3>
                 <div class="images-grid">
-                    <div class="img-box">
-                        <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=300&h=200&fit=crop" alt="Trading 1">
+                    <div class="img-box enhanced-3d">
+                        <img src="https://images.pexels.com/photos/730564/pexels-photo-730564.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&dpr=2" alt="Trading 1" loading="lazy">
                         <p>Live Charts</p>
                     </div>
-                    <div class="img-box">
-                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=300&h=200&fit=crop" alt="Trading 2">
+                    <div class="img-box enhanced-3d">
+                        <img src="https://images.pexels.com/photos/669619/pexels-photo-669619.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&dpr=2" alt="Trading 2" loading="lazy">
                         <p>Profit Screens</p>
                     </div>
-                    <div class="img-box">
-                        <img src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=300&h=200&fit=crop" alt="Trading 3">
+                    <div class="img-box enhanced-3d">
+                        <img src="https://images.pexels.com/photos/6770612/pexels-photo-6770612.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&dpr=2" alt="Trading 3" loading="lazy">
                         <p>Signal System</p>
                     </div>
                 </div>
@@ -384,7 +423,7 @@
             <div class="content-grid">
                 <!-- Left: Coin -->
                 <div class="coin-container">
-                    <div class="coin-3d spinning" id="coin-click">
+                    <div class="coin-3d spinning enhanced-3d" id="coin-click">
                         <div class="coin-front">
                             <i class="fas fa-coins"></i>
                             <h3>LOS COIN</h3>
@@ -392,14 +431,22 @@
                             <div class="click-effect"></div>
                         </div>
                     </div>
+                    <div class="cycle-info enhanced-3d">
+                        <div class="cycle-display">
+                            <i class="fas fa-sync-alt"></i>
+                            Cycle <span id="current-cycle">1</span>: 
+                            <span id="cycle-progress">0</span>/100,000 clicks
+                        </div>
+                    </div>
                     <div class="click-info bounce">
                         <i class="fas fa-hand-pointer"></i>
                         <p>Click the coin to earn!</p>
+                        <small>Manual clicks only - No auto-clickers allowed</small>
                     </div>
                 </div>
                 
                 <!-- Right: Stats -->
-                <div class="stats-panel">
+                <div class="stats-panel enhanced-3d">
                     <div class="stats-header">
                         <h3><i class="fas fa-chart-bar"></i> Click Statistics</h3>
                         <div class="live-badge pulse">LIVE</div>
@@ -420,27 +467,22 @@
                     </div>
                     
                     <div class="rewards-system">
-                        <h4><i class="fas fa-gift"></i> Rewards:</h4>
+                        <h4><i class="fas fa-gift"></i> Current Cycle:</h4>
                         <div class="rewards">
-                            <div class="reward" data-target="50000">
-                                <span>50,000 Clicks</span>
-                                <span class="amount">$1 / 275 Rs</span>
-                                <span class="status" id="reward-50k">Not Reached</span>
+                            <div class="reward">
+                                <span>Cycle <span id="cycle-number">1</span> Progress</span>
+                                <span class="amount"><span id="cycle-clicks">0</span>/100,000</span>
+                                <span class="status" id="cycle-status">In Progress</span>
                             </div>
-                            <div class="reward" data-target="100000">
-                                <span>100,000 Clicks</span>
-                                <span class="amount">$2 / 550 Rs</span>
-                                <span class="status" id="reward-100k">Not Reached</span>
+                            <div class="reward">
+                                <span>Current Reward</span>
+                                <span class="amount">Rs 275</span>
+                                <span class="status" id="reward-status">Complete 100k</span>
                             </div>
-                            <div class="reward" data-target="150000">
-                                <span>150,000 Clicks</span>
-                                <span class="amount">$3 / 825 Rs</span>
-                                <span class="status" id="reward-150k">Not Reached</span>
-                            </div>
-                            <div class="reward" data-target="200000">
-                                <span>200,000 Clicks</span>
-                                <span class="amount">$4 / 1100 Rs</span>
-                                <span class="status" id="reward-200k">Not Reached</span>
+                            <div class="reward">
+                                <span>Total Cycles</span>
+                                <span class="amount"><span id="total-cycles">0</span></span>
+                                <span class="status claimed">Completed</span>
                             </div>
                         </div>
                     </div>
@@ -451,34 +493,35 @@
                         
                         <div class="withdraw-form">
                             <select id="payment-method">
-                                <option>Select Payment Method</option>
-                                <option>Binance</option>
-                                <option>Easypaisa</option>
-                                <option>JazzCash</option>
-                                <option>Bank Transfer</option>
+                                <option value="">Select Payment Method</option>
+                                <option value="Binance">Binance</option>
+                                <option value="Easypaisa">Easypaisa</option>
+                                <option value="JazzCash">JazzCash</option>
+                                <option value="Bank Transfer">Bank Transfer</option>
                             </select>
                             
                             <input type="text" id="account-number" placeholder="Enter your account number">
-                            <input type="email" id="user-email" placeholder="Your email for confirmation">
+                            <input type="text" id="user-name" placeholder="Your name for verification">
                             
                             <div class="current-balance">
                                 <span>Available Balance:</span>
-                                <span id="coin-balance">$0 (Rs 0)</span>
+                                <span id="coin-balance">Rs 0</span>
                             </div>
                             
-                            <button class="withdraw-btn">
+                            <button class="withdraw-btn" id="dashboard-withdraw-btn">
                                 <i class="fas fa-paper-plane"></i> Submit Withdrawal Request
                             </button>
                         </div>
                         
-                        <div class="notification-box">
+                        <div class="notification-box enhanced-3d">
                             <h4><i class="fas fa-bell"></i> Automatic Notification:</h4>
-                            <p>When you complete clicks, you'll get notification with options:</p>
+                            <p>When you complete 100,000 clicks, you'll get notification:</p>
                             <ul>
-                                <li>Click more to earn more (continue for next reward)</li>
-                                <li>Withdraw now (get current earnings)</li>
+                                <li>Cycle completed - Rs 275 earned</li>
+                                <li>Click OK to start next cycle</li>
+                                <li>No email sending - Owner will contact you</li>
                             </ul>
-                            <p class="note">We'll send payment screenshot to your email after processing</p>
+                            <p class="note">Owner will contact you for payment after withdrawal request</p>
                         </div>
                     </div>
                 </div>
@@ -488,39 +531,40 @@
             <div class="image-section">
                 <h3><i class="fas fa-images"></i> Los Coin System:</h3>
                 <div class="images-grid">
-                    <div class="img-box">
-                        <img src="https://images.unsplash.com/photo-1620336655055-bd87c5d1d73f?w=300&h=200&fit=crop" alt="Coin 1">
+                    <div class="img-box enhanced-3d">
+                        <img src="https://images.pexels.com/photos/844124/pexels-photo-844124.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&dpr=2" alt="Coin 1" loading="lazy">
                         <p>Los Coin</p>
                     </div>
-                    <div class="img-box">
-                        <img src="https://images.unsplash.com/photo-1633265486064-086b219458ec?w=300&h=200&fit=crop" alt="Coin 2">
+                    <div class="img-box enhanced-3d">
+                        <img src="https://images.pexels.com/photos/6778548/pexels-photo-6778548.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&dpr=2" alt="Coin 2" loading="lazy">
                         <p>Click System</p>
                     </div>
-                    <div class="img-box">
-                        <img src="https://images.unsplash.com/photo-1621570072941-1d0a5f5c5406?w=300&h=200&fit=crop" alt="Coin 3">
+                    <div class="img-box enhanced-3d">
+                        <img src="https://images.pexels.com/photos/4386476/pexels-photo-4386476.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&dpr=2" alt="Coin 3" loading="lazy">
                         <p>Earnings</p>
                     </div>
                 </div>
             </div>
             
             <!-- Auto Notification Display -->
-            <div class="notification-display" id="notification-display">
+            <div class="notification-display enhanced-3d" id="notification-display">
                 <div class="notification-header">
                     <i class="fas fa-bell"></i>
-                    <h4>Click Goal Reached!</h4>
+                    <h4> 100,000 Clicks Completed!</h4>
                     <button class="close-notif">&times;</button>
                 </div>
                 <div class="notification-body">
-                    <p>Congratulations! You've reached <span id="goal-reached">50,000</span> clicks!</p>
-                    <p>What would you like to do?</p>
+                    <p>Congratulations! You've completed 100,000 clicks!</p>
+                    <p><strong>Earnings: Rs 275 added to your balance.</strong></p>
+                    <p>Now please withdraw your 100k click earnings:</p>
                     <div class="notification-options">
-                        <button class="option-btn continue">
-                            <i class="fas fa-redo"></i> Click More (Earn More)
-                        </button>
-                        <button class="option-btn withdraw">
-                            <i class="fas fa-money-bill-wave"></i> Withdraw Now
+                        <button class="option-btn withdraw" id="withdraw-now-btn">
+                            <i class="fas fa-money-bill-wave"></i> Withdraw Rs 275 Now
                         </button>
                     </div>
+                    <p style="margin-top: 15px; font-size: 12px; color: rgba(255,255,255,0.7);">
+                        <i class="fas fa-info-circle"></i> You can complete 100k multiple times per day
+                    </p>
                 </div>
             </div>
         </section>
@@ -533,10 +577,10 @@
             
             <div class="about-content">
                 <!-- Profile -->
-                <div class="profile-card floating">
+                <div class="profile-card floating enhanced-3d">
                     <div class="profile-header">
                         <div class="profile-img">
-                            <img src="https://i.ibb.co/kgQb0kBv/profile.jpg" alt="My Photo" onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop'">
+                            <img src="https://i.ibb.co/Z7crxXJ/profile.jpg" alt="Professional Developer" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80'">
                         </div>
                         <div class="profile-info">
                             <h2>Professional Web Developer & Trader</h2>
@@ -544,6 +588,7 @@
                                 <span class="tag"><i class="fas fa-code"></i> Web Developer</span>
                                 <span class="tag"><i class="fas fa-chart-line"></i> Trader</span>
                                 <span class="tag"><i class="fas fa-coins"></i> Crypto Expert</span>
+                                <span class="tag"><i class="fas fa-mobile-alt"></i> Mobile Apps</span>
                             </div>
                             <div class="rating">
                                 <i class="fas fa-star"></i>
@@ -558,7 +603,7 @@
                     
                     <div class="profile-bio">
                         <h3><i class="fas fa-lightbulb"></i> My Services:</h3>
-                        <p>I provide legitimate online earning opportunities through Facebook accounts, trading signals, and click-based earnings. All services are 100% real and verified.</p>
+                        <p>I provide legitimate online earning opportunities through Facebook accounts, trading signals, and click-based earnings. All services are 100% real and verified with instant payment proof.</p>
                     </div>
                     
                     <div class="contact-details">
@@ -615,15 +660,17 @@
                         </div>
                     </div>
                     
-                    <div class="payment-instructions">
-                        <h3><i class="fas fa-money-check-alt"></i> How to Pay:</h3>
+                    <div class="payment-instructions enhanced-3d">
+                        <h3><i class="fas fa-money-check-alt"></i> How to Pay & Withdraw:</h3>
                         <ol>
                             <li>Choose service (Facebook/Trading/Coin)</li>
                             <li>Send payment via Easypaisa/JazzCash/Binance</li>
                             <li>Send screenshot to WhatsApp/Email</li>
                             <li>Receive service immediately</li>
-                            <li>For coin earnings: Submit withdrawal request</li>
-                            <li>Receive payment screenshot after processing</li>
+                            <li>For coin earnings: Complete 100k clicks</li>
+                            <li>Withdraw Rs 275 per 100k clicks</li>
+                            <li>Unlimited withdrawals per day</li>
+                            <li>Instant payment after withdrawal request</li>
                         </ol>
                     </div>
                 </div>
@@ -632,24 +679,27 @@
                 <div class="services-images">
                     <h3><i class="fas fa-images"></i> My Services Gallery:</h3>
                     <div class="services-grid">
-                        <div class="service-img">
-                            <img src="https://images.unsplash.com/photo-1633675254053-d96c7668c3b8?w=300&h=200&fit=crop&auto=format" alt="Service 1">
-                            <p>Facebook Accounts</p>
+                        <div class="service-img enhanced-3d">
+                            <img src="https://images.pexels.com/photos/3944419/pexels-photo-3944419.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&dpr=2" alt="Facebook Accounts" loading="lazy">
+                            <p><strong>Facebook Accounts</strong></p>
+                            <small>10 Rs per account</small>
                         </div>
-                        <div class="service-img">
-                            <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=300&h=200&fit=crop" alt="Service 2">
-                            <p>Trading Signals</p>
+                        <div class="service-img enhanced-3d">
+                            <img src="https://images.pexels.com/photos/730564/pexels-photo-730564.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&dpr=2" alt="Trading Signals" loading="lazy">
+                            <p><strong>Trading Signals</strong></p>
+                            <small>15k Rs per month</small>
                         </div>
-                        <div class="service-img">
-                            <img src="https://images.unsplash.com/photo-1620336655055-bd87c5d1d73f?w=300&h=200&fit=crop" alt="Service 3">
-                            <p>Los Coin System</p>
+                        <div class="service-img enhanced-3d">
+                            <img src="https://images.pexels.com/photos/844124/pexels-photo-844124.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&dpr=2" alt="Los Coin System" loading="lazy">
+                            <p><strong>Los Coin System</strong></p>
+                            <small>Rs 275 per 100k clicks</small>
                         </div>
                     </div>
                 </div>
             </div>
             
             <!-- Call to Action -->
-            <div class="cta-section glowing">
+            <div class="cta-section glowing enhanced-3d">
                 <h3><i class="fas fa-rocket"></i> Ready to Start Earning?</h3>
                 <p>Choose any service above or contact me directly</p>
                 <div class="cta-buttons">
@@ -662,6 +712,218 @@
                 </div>
             </div>
         </section>
+
+        <!-- Sports Section -->
+        <section id="sports" class="section">
+            <div class="section-header">
+                <h1><i class="fas fa-running"></i> Sports Betting Tips</h1>
+                <div class="salary-badge glowing">90% Win Rate</div>
+            </div>
+            
+            <div class="content-grid">
+                <!-- Left: 3D Box -->
+                <div class="trading-3d-box">
+                    <div class="box-3d floating enhanced-3d" style="background: linear-gradient(45deg, #8B4513, #A0522D); border: 3px solid #8B4513;">
+                        <div class="front">
+                            <div class="trading-icon">
+                                <i class="fas fa-futbol"></i>
+                            </div>
+                            <h3>Sports Betting</h3>
+                            <p class="salary">High Accuracy</p>
+                            <div class="features">
+                                <span><i class="fas fa-check"></i> Cricket Tips</span>
+                                <span><i class="fas fa-check"></i> Football Tips</span>
+                                <span><i class="fas fa-check"></i> Tennis Tips</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right: Details -->
+                <div class="details-panel enhanced-3d">
+                    <h3><i class="fas fa-trophy"></i> Sports Betting Details</h3>
+                    
+                    <div class="signal-info">
+                        <div class="info-box">
+                            <i class="fas fa-percentage"></i>
+                            <div>
+                                <h4>Win Rate</h4>
+                                <p>85-90%</p>
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            <i class="fas fa-rupee-sign"></i>
+                            <div>
+                                <h4>Daily Tips</h4>
+                                <p>3-5 Matches</p>
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            <i class="fas fa-shield-alt"></i>
+                            <div>
+                                <h4>Safety</h4>
+                                <p>Verified Tips</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="trading-payment">
+                        <h4><i class="fas fa-info-circle"></i> How to Get Tips:</h4>
+                        <p>Contact me for daily sports betting tips</p>
+                        
+                        <div class="contact-method">
+                            <div class="whatsapp-contact">
+                                <i class="fab fa-whatsapp"></i>
+                                <div>
+                                    <strong>WhatsApp:</strong>
+                                    <span>+92 333 4912454</span>
+                                </div>
+                                <button class="copy" onclick="navigator.clipboard.writeText('+923334912454')">
+                                    <i class="far fa-copy"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="whatsapp-contact" style="background: rgba(219, 68, 55, 0.1); border: 1px solid rgba(219, 68, 55, 0.2); margin-top: 15px;">
+                                <i class="fas fa-envelope"></i>
+                                <div>
+                                    <strong>Email:</strong>
+                                    <span>xstylishriaz72@gmail.com</span>
+                                </div>
+                                <button class="copy" onclick="navigator.clipboard.writeText('xstylishriaz72@gmail.com')">
+                                    <i class="far fa-copy"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="send-options">
+                                <button class="send-signal-btn whatsapp-action">
+                                    <i class="fab fa-whatsapp"></i> WhatsApp for Tips
+                                </button>
+                                <button class="send-signal-btn email">
+                                    <i class="fas fa-envelope"></i> Email for Tips
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-note">
+                            <p><i class="fas fa-lightbulb"></i> Tips include: Match winner, Total runs, Player performance</p>
+                            <p><i class="fas fa-money-bill-wave"></i> Payment after verification of tips</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Help Section -->
+        <section id="help" class="section">
+            <div class="section-header">
+                <h1><i class="fas fa-question-circle"></i> Help & Support</h1>
+            </div>
+            
+            <div class="details-panel enhanced-3d">
+                <h3><i class="fas fa-life-ring"></i> Frequently Asked Questions</h3>
+                
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <h4><i class="fas fa-question"></i> How to create Facebook accounts?</h4>
+                        <p>Go to Facebook section  Enter quantity  Click "Create Accounts Now"  Send UID/Pass via WhatsApp</p>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h4><i class="fas fa-question"></i> How to earn from Los Coin?</h4>
+                        <p>Click the coin 100,000 times  Earn Rs 275  Withdraw via withdrawal form  Owner will contact you</p>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h4><i class="fas fa-question"></i> How to get trading signals?</h4>
+                        <p>Contact via WhatsApp/Email  Pay 15,000 Rs  Receive daily trading signals</p>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h4><i class="fas fa-question"></i> How to withdraw money?</h4>
+                        <p>Complete 100k clicks  Click withdraw  Fill payment details  Owner contacts within 24 hours</p>
+                    </div>
+                </div>
+                
+                <div class="contact-help">
+                    <h3><i class="fas fa-headset"></i> 24/7 Customer Support</h3>
+                    
+                    <div class="support-contacts">
+                        <div class="support-contact">
+                            <div class="support-icon" style="background: rgba(37, 211, 102, 0.2); border: 2px solid #25D366;">
+                                <i class="fab fa-whatsapp"></i>
+                            </div>
+                            <div>
+                                <h4>WhatsApp Support</h4>
+                                <a href="https://wa.me/923334912454" target="_blank" class="support-link">
+                                    +92 333 4912454
+                                </a>
+                                <p>Quick response within minutes</p>
+                            </div>
+                            <button class="support-btn whatsapp-action">
+                                <i class="fab fa-whatsapp"></i> Chat Now
+                            </button>
+                        </div>
+                        
+                        <div class="support-contact">
+                            <div class="support-icon" style="background: rgba(219, 68, 55, 0.2); border: 2px solid #DB4437;">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <h4>Email Support</h4>
+                                <a href="mailto:xstylishriaz72@gmail.com" class="support-link">
+                                    xstylishriaz72@gmail.com
+                                </a>
+                                <p>Response within 2-3 hours</p>
+                            </div>
+                            <button class="support-btn email">
+                                <i class="fas fa-envelope"></i> Email Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="help-info enhanced-3d" style="background: rgba(37, 211, 102, 0.1); padding: 20px; border-radius: 15px; margin-top: 20px;">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Important Notes:</h4>
+                    <ul>
+                        <li>No auto-clickers allowed - Manual clicks only</li>
+                        <li>Each click counts exactly once</li>
+                        <li>Auto-clicker apps will be detected and blocked</li>
+                        <li>Payment within 24 hours after withdrawal request</li>
+                        <li>100% legitimate earning system</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Mobile Footer -->
+    <div class="mobile-footer">
+        <div class="footer-nav">
+            <a href="#facebook" class="footer-nav-btn active" data-section="facebook">
+                <i class="fab fa-facebook"></i>
+                <span>Home</span>
+            </a>
+            <a href="#trading" class="footer-nav-btn" data-section="trading">
+                <i class="fas fa-chart-line"></i>
+                <span>Trading</span>
+            </a>
+            <a href="#coin" class="footer-nav-btn" data-section="coin">
+                <i class="fas fa-coins"></i>
+                <span>Coins</span>
+            </a>
+            <a href="#about" class="footer-nav-btn" data-section="about">
+                <i class="fas fa-user"></i>
+                <span>About</span>
+            </a>
+            <a href="#sports" class="footer-nav-btn" data-section="sports">
+                <i class="fas fa-running"></i>
+                <span>Sports</span>
+            </a>
+            <a href="#help" class="footer-nav-btn" data-section="help">
+                <i class="fas fa-question-circle"></i>
+                <span>Help</span>
+            </a>
+        </div>
     </div>
 
     <!-- Audio -->
